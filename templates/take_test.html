@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>{{ test.title }}</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    .box { border: 1px solid #ddd; padding: 16px; margin-bottom: 16px; border-radius: 10px; }
+    label { display:block; margin: 6px 0; }
+    input[type="text"] { width: 100%; padding: 10px; }
+    button { padding: 10px 14px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>TEST PAGE LOADED ✅</h1>
+    <h2>{{ test.title }}</h2>
+    <p>If you can see this, your template is working.</p>
+  </div>
+
+  <!-- submit uses slug -->
+  <form method="post" action="/tests/{{ test.slug }}/submit">
+    <div class="box">
+      <h3>Your name</h3>
+      <input type="text" name="student_name" required value="{{ saved_name }}">
+    </div>
+
+    <div class="box">
+      <h3>Questions ({{ questions|length }})</h3>
+
+      {% for q in questions %}
+        <div class="box">
+          <p><strong>Q{{ loop.index }}:</strong> {{ q.prompt }}</p>
+
+          {% if q.qtype == "TF" %}
+            <label><input type="radio" name="q_{{ q.id }}" value="A"> True</label>
+            <label><input type="radio" name="q_{{ q.id }}" value="B"> False</label>
+          {% else %}
+            <label><input type="radio" name="q_{{ q.id }}" value="A"> A) {{ q.a }}</label>
+            <label><input type="radio" name="q_{{ q.id }}" value="B"> B) {{ q.b }}</label>
+            <label><input type="radio" name="q_{{ q.id }}" value="C"> C) {{ q.c }}</label>
+            <label><input type="radio" name="q_{{ q.id }}" value="D"> D) {{ q.d }}</label>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="box">
+      <button type="submit">Sub

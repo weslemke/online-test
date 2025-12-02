@@ -1,0 +1,48 @@
+
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Online Tests</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    .test-box {
+      border: 1px solid #ddd;
+      padding: 16px;
+      margin-bottom: 16px;
+      border-radius: 10px;
+      background: #fafafa;
+    }
+    a.button {
+      display: inline-block;
+      padding: 8px 12px;
+      border: 1px solid #444;
+      border-radius: 8px;
+      text-decoration: none;
+      margin-right: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Online Tests</h1>
+  <p><a href="/admin/create" class="button">Admin: Create a Test</a></p>
+  <p><a href="/admin/login" class="button">Admin Login</a></p>
+
+  {% for t in tests %}
+    <div class="test-box">
+      <h2>{{ t.title }}</h2>
+      <p>Pass score: {{ t.pass_score }}%</p>
+
+      <!-- Student test link using slug -->
+      <p><a href="/tests/{{ t.slug }}/take" class="button">Take this test</a></p>
+
+      <!-- Admin edit still uses ID -->
+      <p><a href="/admin/tests/{{ t.id }}/edit" class="button">Admin: Edit this test</a></p>
+    </div>
+  {% else %}
+    <p>No tests yet—create one.</p>
+  {% endfor %}
+
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Admin Edit - {{test.title}}</title>
+  <style>
+    body { font-family: system-ui, Arial; max-width: 1000px; margin: 32px auto; padding: 0 16px; }
+    .card { border: 1px solid #ddd; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    input, textarea, select, button { width: 100%; padding: 10px; margin-top: 8px; }
+    .row { display:flex; gap: 10px; }
+    .row > * { flex:1; }
+    .qbox { border: 1px solid #eee; border-radius: 12px; padding: 12px; margin-top: 12px; }
+    .btnrow { display:flex; gap:10px; margin-top:10px; }
+    .btnrow > * { flex:1; }
+    .danger { border: 1px solid #c55; }
+    a { text-decoration:none; }
+    .muted { opacity: 0.75; }
+  </style>
+</head>
+<body>
+
+  <p>
+    <a href="/">← back home</a>
+    <span class="muted">·</span>
+    <a href="/admin/tests/{{test.id}}/questions">add more questions</a>
+    <span class="muted">·</span>
+    <a href="/tests/{{test.id}}/take">open student link</a>
+  </p>
+
+  <div class="card">
+    <h1>Edit Test</h1>
+
+    <form method="post" action="/admin/tests/{{test.id}}/edit">
+      <label>Title</label>
+      <input name="title" value="{{test.title}}" required />
+
+      <label>Pass score (%)</label>
+      <input name="pass_score" type="number" min="0" max="100" value="{{test.pass_score}}" required />
+
+      <button type="submit">Save Test Settings</button>
+    </form>
+
+    <form method="post" action="/admin/tests/{{test.id}}/delete"
+          onsubmit="return confirm('Delete this entire test AND all questions?');"
+          style="margin-top: 12px;">
+      <button class="danger" type="submit">Delete Test</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Edit Questions</h2>
+
+    {% for q in questions %}
+      <div class="qbox">
+        <form method="post" action="/admin/questions/{{q.id}}/update">
+          <label>Prompt</label>
+          <textarea name="prompt" required>{{q.prompt}}</textarea>
+
+          <div class="row">
+            <div>
+              <label>A</label>
+              <input name="a" value="{{q.a}}" required />
+            </div>
+            <div>
+              <label>B</label>
+              <input name="b" value="{{q.b}}" required />
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>C</label>
+              <input name="c" value="{{q.c}}" required />
+            </div>
+            <div>
+              <label>D</label>
+              <input name="d" value="{{q.d}}" required />
+            </div>
+          </div>
+
+          <label>Correct answer</label>
+          <select name="correct" required>
+            <option value="A" {% if q.correct == 'A' %}selected{% endif %}>A</option>
+            <option value="B" {% if q.correct == 'B' %}selected{% endif %}>B</option>
+            <option value="C" {% if q.correct == 'C' %}selected{% endif %}>C</option>
+            <option value="D" {% if q.correct == 'D' %}selected{% endif %}>D</option>
+          </select>
+
+          <div class="btnrow">
+            <button type="submit">Save Question</button>
+          </div>
+        </form>
+
+        <form method="post" action="/admin/questions/{{q.id}}/delete"
+              onsubmit="return confirm('Delete this question?');"
+              style="margin-top: 10px;">
+          <button class="danger" type="submit">Delete Question</button>
+        </form>
+      </div>
+    {% else %}
+      <p>No questions yet. Click “add more questions” above.</p>
+    {% endfor %}
+
+  </div>
+
+</body>
+</html>

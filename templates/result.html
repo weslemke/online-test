@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Results - {{ test.title }}</title>
+  <style>
+    body { font-family: system-ui, Arial; max-width: 980px; margin: 32px auto; padding: 0 16px; }
+    .card { border: 1px solid #ddd; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    .pass { border-color: #7ad67a; }
+    .fail { border-color: #e08a8a; }
+    .good { border-color: #cfe9d6; }
+    .bad { border-color: #f1c7c7; }
+    .pill { display:inline-block; padding: 4px 10px; border: 1px solid #555; border-radius: 999px; }
+    a.button {
+      display:inline-block; padding:10px 14px; border:1px solid #444; border-radius:10px;
+      text-decoration:none; margin-right: 8px; margin-top: 8px;
+    }
+    .muted { opacity: 0.75; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+  </style>
+</head>
+
+<body>
+  <div class="card {% if passed %}pass{% else %}fail{% endif %}">
+    <h1>Results</h1>
+    <p><strong>Test:</strong> {{ test.title }}</p>
+    <p><strong>Name:</strong> {{ student_name }}</p>
+
+    <p>
+      <strong>Score:</strong> <span class="mono">{{ score }}%</span>
+      <span class="muted">• Pass mark: {{ test.pass_score }}%</span>
+    </p>
+
+    {% if passed %}
+      <p class="pill">✅ PASS</p>
+      <p class="muted">You can download your certificate below.</p>
+
+      <p>
+        <a class="button" href="/tests/{{ test.id }}/certificate">Download Certificate (PDF)</a>
+        <a class="button" href="/">Back Home</a>
+      </p>
+    {% else %}
+      <p class="pill">❌ FAIL</p>
+      <p class="muted">Review your answers below. When you’re ready, click retake.</p>
+
+      <p>
+        <a class="button" href="/tests/{{ test.id }}/take">Retake Exam</a>
+        <a class="button" href="/">Back Home</a>
+      </p>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <h2>Answer Review</h2>
+    <p class="muted">Each question shows your answer and the correct answer.</p>
+  </div>
+
+  {% for r in review %}
+    <div class="card {% if r.is_correct %}good{% else %}bad{% endif %}">
+      <h3>Q{{ loop.index }}. {{ r.prompt }}</h3>
+
+      <p>
+        <strong>Your answer:</strong>
+        <span class="mono">{{ r.chosen }}</span> — {{ r.chosen_text }}
+      </p>
+
+      <p>
+        <strong>Correct answer:</strong>
+        <span class="mono">{{ r.correct }}</span> — {{ r.correct_text }}
+      </p>
+
+      {% if r.is_correct %}
+        <p>✅ Correct</p>
+      {% else %}
+        <p>❌ Incorrect</p>
+      {% endif %}
+    </div>
+  {% endfor %}
+</body>
+</html>
