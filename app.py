@@ -15,7 +15,7 @@ app.secret_key = "change-this-to-a-long-random-secret"  # change if you deploy o
 DB = "test.db"
 
 # Admin password (requested)
-ADMIN_PASSWORD = "Rotamotion1"
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "Rotamotion1")
 
 # Certificate storage (admin controlled)
 CERT_DIR = "certificates"
