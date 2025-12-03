@@ -46,10 +46,8 @@
 </head>
 <body>
 
-  <!-- Banner logo (centered) -->
   <div class="banner">
     <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Rotamotion Logo">
-
   </div>
 
   <div class="container">
@@ -65,10 +63,8 @@
         <h2>{{ t.title }}</h2>
         <p class="muted">Pass score: {{ t.pass_score }}%</p>
 
-        <!-- Student test link using slug -->
         <p><a href="/tests/{{ t.slug }}/take" class="button">Take this test</a></p>
 
-        <!-- Admin edit still uses ID -->
         <p><a href="/admin/tests/{{ t.id }}/edit" class="button">Admin: Edit this test</a></p>
       </div>
     {% else %}
