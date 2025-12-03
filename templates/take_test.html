@@ -4,46 +4,86 @@
   <meta charset="utf-8" />
   <title>{{ test.title }}</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    .box { border: 1px solid #ddd; padding: 16px; margin-bottom: 16px; border-radius: 10px; }
-    label { display:block; margin: 6px 0; }
-    input[type="text"] { width: 100%; padding: 10px; }
+    body { font-family: Arial, sans-serif; padding: 0; margin: 0; background:#f6f7f9; }
+    .container { max-width: 980px; margin: 0 auto; padding: 20px; }
+
+    .banner {
+      background: #ffffff;
+      border-bottom: 1px solid #e6e6e6;
+      padding: 18px 12px;
+      text-align: center;
+    }
+    .banner img {
+      max-height: 110px;
+      max-width: 95%;
+      width: auto;
+      display: inline-block;
+      object-fit: contain;
+    }
+
+    .box {
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 16px;
+      margin-bottom: 16px;
+      border-radius: 10px;
+    }
+
+    label { display:block; margin: 8px 0; }
+    input[type="text"] { width: 100%; padding: 10px; box-sizing: border-box; }
     button { padding: 10px 14px; cursor: pointer; }
+    .muted { opacity: 0.75; }
+    .title { margin: 0; }
+    .debug { font-weight: 700; }
   </style>
 </head>
 <body>
-  <div class="box">
-    <h1>TEST PAGE LOADED ✅</h1>
-    <h2>{{ test.title }}</h2>
-    <p>If you can see this, your template is working.</p>
+
+  <div class="banner">
+    <img src="/static/logo.jpg" alt="Rotamotion Logo">
   </div>
 
-  <!-- submit uses slug -->
-  <form method="post" action="/tests/{{ test.slug }}/submit">
+  <div class="container">
+
     <div class="box">
-      <h3>Your name</h3>
-      <input type="text" name="student_name" required value="{{ saved_name }}">
+      <div class="debug">TAKE TEST PAGE ✅</div>
+      <h2 class="title">{{ test.title }}</h2>
+      <p class="muted">Pass score: {{ test.pass_score }}%</p>
+      <p class="muted">Questions loaded: <strong>{{ questions|length }}</strong></p>
     </div>
 
-    <div class="box">
-      <h3>Questions ({{ questions|length }})</h3>
+    <form method="post" action="/tests/{{ test.slug }}/submit">
+      <div class="box">
+        <h3>Your name</h3>
+        <input type="text" name="student_name" required value="{{ saved_name }}">
+      </div>
 
-      {% for q in questions %}
-        <div class="box">
-          <p><strong>Q{{ loop.index }}:</strong> {{ q.prompt }}</p>
+      <div class="box">
+        <h3>Questions</h3>
 
-          {% if q.qtype == "TF" %}
-            <label><input type="radio" name="q_{{ q.id }}" value="A"> True</label>
-            <label><input type="radio" name="q_{{ q.id }}" value="B"> False</label>
-          {% else %}
-            <label><input type="radio" name="q_{{ q.id }}" value="A"> A) {{ q.a }}</label>
-            <label><input type="radio" name="q_{{ q.id }}" value="B"> B) {{ q.b }}</label>
-            <label><input type="radio" name="q_{{ q.id }}" value="C"> C) {{ q.c }}</label>
-            <label><input type="radio" name="q_{{ q.id }}" value="D"> D) {{ q.d }}</label>
-          {% endif %}
-        </div>
-      {% endfor %}
-    </div>
+        {% for q in questions %}
+          <div class="box">
+            <p><strong>Q{{ loop.index }}:</strong> {{ q.prompt }}</p>
 
-    <div class="box">
-      <button type="submit">Sub
+            {% if q.qtype == "TF" %}
+              <label><input required type="radio" name="q_{{ q.id }}" value="A"> True</label>
+              <label><input required type="radio" name="q_{{ q.id }}" value="B"> False</label>
+            {% else %}
+              <label><input required type="radio" name="q_{{ q.id }}" value="A"> A) {{ q.a }}</label>
+              <label><input required type="radio" name="q_{{ q.id }}" value="B"> B) {{ q.b }}</label>
+              <label><input required type="radio" name="q_{{ q.id }}" value="C"> C) {{ q.c }}</label>
+              <label><input required type="radio" name="q_{{ q.id }}" value="D"> D) {{ q.d }}</label>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="box">
+        <button type="submit">Submit Exam</button>
+        <a href="/" style="margin-left:12px;">Back home</a>
+      </div>
+    </form>
+
+  </div>
+</body>
+</html>

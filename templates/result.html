@@ -36,7 +36,7 @@
       <p class="muted">You can download your certificate below.</p>
 
       <p>
-        <a class="button" href="/tests/{{ test.id }}/certificate">Download Certificate (PDF)</a>
+        <a class="button" href="/tests/{{ test.slug }}/certificate/{{ attempt_id }}">Download Certificate (PDF)</a>
         <a class="button" href="/">Back Home</a>
       </p>
     {% else %}
@@ -44,7 +44,7 @@
       <p class="muted">Review your answers below. When you’re ready, click retake.</p>
 
       <p>
-        <a class="button" href="/tests/{{ test.id }}/take">Retake Exam</a>
+        <a class="button" href="/tests/{{ test.slug }}/take">Retake Exam</a>
         <a class="button" href="/">Back Home</a>
       </p>
     {% endif %}
